@@ -1,0 +1,73 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cmath>
+
+const std::string FILE_PATH = "C:\\Уник\\ОП\\Лаб з 0п\\оіпз 3\\output.txt";
+
+bool открытьФайлДляЗаписи(std::ofstream& file, const std::string& filePath) {
+    file.open(filePath);
+    return file.is_open();
+}
+
+double вычислить_y(double x) {
+    if (x <= 7) {
+        double y = 0;
+        for (int i = 2; i >= -2; i--) {
+            y += (x - i) * (x - i);
+        }
+        return y;
+    }
+    else {
+        return x + 7;
+    }
+}
+
+int main() {
+    double a, b, h;
+
+    std::cout << "Введите начало интервала a: ";
+    std::cin >> a;
+
+    std::cout << "Введите конец интервала b: ";
+    std::cin >> b;
+
+    std::cout << "Введите шаг h: ";
+    std::cin >> h;
+
+    // Проверка на некорректный ввод
+    if (std::cin.fail()) {
+        std::cerr << "Некорректный ввод. Пожалуйста, введите числовые значения." << std::endl;
+        return 1;
+    }
+
+    if (a >= b || h <= 0) {
+        std::cout << "Некорректные значения интервала и/или шага." << std::endl;
+        return 1;
+    }
+
+    std::ofstream outputFile;
+    if (!открытьФайлДляЗаписи(outputFile, FILE_PATH)) {
+        std::cerr << "Не удалось открыть файл для записи." << std::endl;
+        return 1;
+    }
+
+    // Буфер для хранения результатов перед записью в файл
+    std::ostringstream buffer;
+    for (double x = a; x < b; x += h) {
+        double y = вычислить_y(x);
+        std::cout << "x = " << x << "; y = " << y << std::endl;
+        buffer << "x = " << x << "; y = " << y << "\n";
+    }
+
+    // Запись всех результатов в файл одним вызовом
+    outputFile << buffer.str();
+
+    outputFile.close(); // Закрыть файл после использования
+    return 0;
+}
+
+
+
+
+
